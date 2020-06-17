@@ -105,8 +105,6 @@ Android网络通信一般会用到`HttpURLConnection`、`OkHttp`、`Retrofit`、
 </ul>
 <p>本文主要介绍<code>HttpURLConnection</code>和<code>OkHttp</code>的使用，基于<code>HttpURLConnection</code>或者<code>OkHttp</code>封装而来的<code>Retrofit</code>、<code>Volley</code>则做简单说明即可。通过了解通信库的使用方法，达到在Android应用分析中可以通过网络关键字找到数据的操作流程。</p>
 <hr>
-<p>[toc]</p>
-<hr>
 <h1 id="HttpURLConnection"><a href="#HttpURLConnection" class="headerlink" title="HttpURLConnection"></a>HttpURLConnection</h1><h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.android.com/"</span>);</span><br><span class="line">   HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     InputStream in = <span class="keyword">new</span> BufferedInputStream(urlConnection.getInputStream());</span><br><span class="line">     readStream(in); <span class="comment">// in &gt; data</span></span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">     urlConnection.disconnect();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
 <p>首先构造URL，然后生成<code>HttpURLConnection</code>对象，回复内容利用<code>getInputStream</code>方法从连接对象中获取。</p>
