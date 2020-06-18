@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    归档 |  小小-变大
+    基于frida的自动hook工具介绍 |  小小-变大
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -43,92 +43,202 @@
       
     <main class="content on">
       <section class="outer">
-  <article class="articles">
+  <article
+  id="post-基于frida的自动hook工具介绍"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">归档</h1>
-    
-    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  基于frida的自动hook工具介绍
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" class="article-date">
+  <time datetime="2020-06-17T16:00:00.000Z" itemprop="datePublished">2020-06-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
+  </div>
   
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2020" class="archive-year">2020</a>
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">266</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">1 分钟</span>
+        </span>
+    </span>
+</div>
+ 
     </div>
-    <div class="archives">
       
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" class="archive-article-date">
-  <time datetime="2020-06-17T16:00:00.000Z" itemprop="datePublished">06/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/"
-    >基于frida的自动hook工具介绍</a> 
-</h2>
- 
+    <div class="tocbot"></div>
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/17/%E4%BC%98%E9%9B%85%E7%9A%84%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0/" class="archive-article-date">
-  <time datetime="2020-06-17T09:16:00.000Z" itemprop="datePublished">06/17</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/17/%E4%BC%98%E9%9B%85%E7%9A%84%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0/"
-    >优雅的保存网页</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/17/android%20%E7%BD%91%E7%BB%9C%E5%85%B3%E9%94%AE%E5%AD%97/" class="archive-article-date">
-  <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">06/17</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/17/android%20%E7%BD%91%E7%BB%9C%E5%85%B3%E9%94%AE%E5%AD%97/"
-    >android 网络关键字</a> 
-</h2>
- 
 
-    </header>
-    
-    
-  </div>
-</article>
-      
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="HTTPDecrypt"><a href="#HTTPDecrypt" class="headerlink" title="HTTPDecrypt"></a>HTTPDecrypt</h2><blockquote>
+<p>Simple Android/iOS protocol analysis and utilization tool</p>
+</blockquote>
+<h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><p>基于python和frida开发，则系统必须安装python、frida，手机端可运行frida_server</p>
+<ul>
+<li>pip install colorlog flask flask_socketio requests （安装依赖包）</li>
+</ul>
+<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><ul>
+<li>手机端启动frida_server</li>
+<li>电脑端启动脚本（python app.py）</li>
+<li>访问网页（<a href="http://127.0.0.1:8088/）" target="_blank" rel="noopener">http://127.0.0.1:8088/）</a></li>
+</ul>
+<h3 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h3><h4 id="hook"><a href="#hook" class="headerlink" title="hook"></a>hook</h4><ol>
+<li>添加包名</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519163710243.png" alt="image-20200519163710243"></p>
+<ol start="2">
+<li>hook类，全局搜索填写的类名（支持正则），并hook该类的全部方法。</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519164305416.png" alt="image-20200519164305416"></p>
+<ol start="3">
+<li>堆栈信息，打印方法的调用堆栈信息。</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519164609700.png" alt="image-20200519164609700"></p>
+<h4 id="UIdump"><a href="#UIdump" class="headerlink" title="UIdump"></a>UIdump</h4><p>该特征可以查看应用的UI构造</p>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519164913870.png" alt="image-20200519164913870"></p>
+<h2 id="objection"><a href="#objection" class="headerlink" title="objection"></a>objection</h2><blockquote>
+<p>objection - runtime mobile exploration</p>
+</blockquote>
+<h3 id="install-1"><a href="#install-1" class="headerlink" title="install"></a>install</h3><p>基于python和frida开发，则系统必须安装python、frida，手机端可运行frida_server</p>
+<ul>
+<li>pip install objection</li>
+</ul>
+<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><ol>
+<li>启动</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519165917487.png" alt="image-20200519165917487"></p>
+<ol start="2">
+<li>hook给定类的全部方法</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519170033263.png" alt="image-20200519170033263"></p>
+<ol start="3">
+<li>hook给定的特定方法</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519170138476.png" alt="image-20200519170138476"></p>
+<ol start="4">
+<li>hook结果展示（打印参数和返回值）</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519170252751.png" alt="image-20200519170252751"></p>
+<ol start="5">
+<li>管理hook任务（通过jobs来管理）</li>
+</ol>
+<p><img src="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/image-20200519170354941.png" alt="image-20200519170354941"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上两个工具都是基于frida开发，其中包含大量的frida脚本，其目的是通过简单的点击或命令达到hook特定类或方法的功能，可以减少逆向开发中hook脚本的书写。</p>
+ 
+      <!-- reward -->
       
     </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://8023believe.github.io/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/frida/" rel="tag">frida</a></li></ul>
+
+    </footer>
   </div>
-  
-  
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/17/%E4%BC%98%E9%9B%85%E7%9A%84%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">优雅的保存网页</div>
+      </a>
+    
+  </nav>
 
   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -276,6 +386,23 @@
 </script>
 
 <!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
