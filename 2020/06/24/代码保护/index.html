@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    代码保护 |  小小-变大
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-代码保护"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  代码保护
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/" class="article-date">
+  <time datetime="2020-06-23T16:00:00.000Z" itemprop="datePublished">2020-06-24</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.5k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">9 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>代码保护主要涉及两个方面</p>
+<ul>
+<li>混淆 ： 对代码字符串加密，类名，函数名等进行修改，或者替换一些代码逻辑，在代码逻辑中添加一些无用的跳转等。</li>
+<li>加固： 对代码块直接进行加密（各大加固厂家提供服务），执行时加载到内存后进行解密，多用于移动端应用</li>
+</ul>
+<p>混淆操作根据语言特性、编译器原理等分为<strong>解释型语言混淆，编译型语言混淆</strong>。</p>
+<h1 id="混淆"><a href="#混淆" class="headerlink" title="混淆"></a>混淆</h1><h2 id="解释型语言混淆-JAVA"><a href="#解释型语言混淆-JAVA" class="headerlink" title="解释型语言混淆   JAVA"></a>解释型语言混淆   JAVA</h2><p>Java代码是非常容易反编译的，作为一种跨平台的、解释型语言，Java 源代码被编译成中间“字节码”存储于class文件中。由于跨平台的需要，这些字节码带有许多的语义信息，很容易被反编译成Java源代码。为了很好地保护Java源代码，开发者往往会<strong>对编译好的class文件进行混淆</strong>处理。</p>
+<p>混淆就是对发布出去的程序进行重新组织和处理，使得处理后的代码与处理前代码完成相同的功能，而混淆后的代码很难被反编译，即使反编译成功也很难得出程序的真正语义。</p>
+<h3 id="Proguard"><a href="#Proguard" class="headerlink" title="Proguard"></a><a href="https://www.guardsquare.com/en/products/proguard" target="_blank" rel="noopener"><strong>Proguard</strong></a></h3><p><a href="https://www.guardsquare.com/en/products/proguard" target="_blank" rel="noopener">https://www.guardsquare.com/en/products/proguard</a></p>
+<p>ProGuard是一个混淆代码的开源项目，能够对字节码进行混淆、缩减体积、优化等处理。</p>
+<p>Proguard处理流程图如下所示，包含压缩、优化、混淆、预检四个主要环节：</p>
+<ul>
+<li><strong>压缩</strong>（Shrink）：检测并移除代码中无用的类、字段、方法和特性（Attribute）；</li>
+<li><strong>优化</strong>（Optimize）：对字节码进行优化，移除无用的指令。优化代码，非入口节点类会加上private/static/final，没有用到的参数会被删除，一些方法可能会变成内联代码；</li>
+<li><strong>混淆</strong>（Obfuscate）：使用a、b、c、d这样简短而无意义的名称，对类、字段和方法进行重命名；</li>
+<li><strong>预检</strong>（Preveirfy）：在Java平台上对处理后的代码进行预检，确保加载的class文件是可执行的。</li>
+</ul>
+<p>Proguard 官网介绍</p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/proguard.png" alt="proguard"></p>
+<p>Proguard混淆<strong>前后对比</strong></p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/protest.png" alt="protest"></p>
+<p>Proguard混淆后==jar包大小减少30%==</p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/size.png" alt="size"></p>
+<h3 id="Android-Studio"><a href="#Android-Studio" class="headerlink" title="Android Studio"></a><strong>Android Studio</strong></h3><p>由于Android应用必须分发到各大应用市场供用户下载，其下载的APK文件如果不做处理，则会被反编译成java源码。</p>
+<p>为了Android应用的安全，Google的Android开发IDE中集成了混淆插件，该插件以前利用ProGuard来进行混淆操作，最新的IDE中，Google参照ProGuard工作原理重构了该插件，命名为R8，其对Android虚拟机更友好。</p>
+<ul>
+<li><p><strong>代码缩减（即摇树优化）</strong>：从应用及其库依赖项中检测并安全地移除未使用的类、字段、方法和属性（这使其成为了一个对于规避 <a href="https://developer.android.com/studio/build/multidex?hl=zh-cn" target="_blank" rel="noopener">64k 引用限制</a>非常有用的工具）。例如，如果您仅使用某个库依赖项的少数几个 API，缩减功能可以识别应用“未”使用的库代码并仅从应用中移除这部分代码。如需了解详情，请转到介绍如何<a href="https://developer.android.com/studio/build/shrink-code?hl=zh-cn#shrink-code" target="_blank" rel="noopener">缩减代码</a>的部分。</p>
+</li>
+<li><p><strong>资源缩减</strong>：从封装应用中移除不使用的资源，包括应用库依赖项中的不使用的资源。此功能可与代码缩减功能结合使用，这样一来，移除不使用的代码后，也可以安全地移除不再引用的所有资源。如需了解详情，请转到介绍如何<a href="https://developer.android.com/studio/build/shrink-code?hl=zh-cn#shrink-resources" target="_blank" rel="noopener">缩减资源</a>的部分。</p>
+</li>
+<li><p><strong>混淆处理</strong>：缩短类和成员的名称，从而减小 DEX 文件的大小。如需了解详情，请转到介绍如何<a href="https://developer.android.com/studio/build/shrink-code?hl=zh-cn#obfuscate" target="_blank" rel="noopener">对代码进行混淆处理</a>的部分。</p>
+</li>
+<li><p><strong>优化</strong>：检查并重写代码，以进一步减小应用的 DEX 文件的大小。例如，如果 R8 检测到从未采用过给定 if/else 语句的 <code>else {}</code> 分支，则会移除 <code>else {}</code> 分支的代码。如需了解详情，请转到介绍<a href="https://developer.android.com/studio/build/shrink-code?hl=zh-cn#optimization" target="_blank" rel="noopener">代码优化</a>的部分。</p>
+</li>
+</ul>
+<p>默认情况下，在构建应用的发布版本时，R8 会自动执行上述编译时任务。不过，您也可以停用某些任务或通过 ProGuard 规则文件自定义 R8 的行为。 事实上，<strong>R8 支持所有现有 ProGuard 规则文件</strong>，因此您在更新 Android Gradle 插件以使用 R8 时，无需更改现有规则。</p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/as.png" alt="as"></p>
+<p align="center">android 代码混淆效果</p>
+
+<h2 id="编译型语言混淆-C-C"><a href="#编译型语言混淆-C-C" class="headerlink" title="编译型语言混淆  C/C++"></a>编译型语言混淆  C/C++</h2><p>编译型语言的混淆一般在编译器层面进行混淆，主流的混淆工具为OLLVM(Obfuscator-LLVM)</p>
+<h3 id="LLVM"><a href="#LLVM" class="headerlink" title="LLVM"></a><strong>LLVM</strong></h3><p>是一个<a href="https://zh.wikipedia.org/wiki/自由軟體" target="_blank" rel="noopener">自由软件</a>项目，它是一种<a href="https://zh.wikipedia.org/wiki/編譯器" target="_blank" rel="noopener">编译器</a>基础设施，以<a href="https://zh.wikipedia.org/wiki/C%2B%2B" target="_blank" rel="noopener">C++</a>写成，包含一系列模块化的编译器组件和工具链，用来开发编译器<a href="https://zh.wikipedia.org/wiki/前端" target="_blank" rel="noopener">前端</a>和<a href="https://zh.wikipedia.org/wiki/後端" target="_blank" rel="noopener">后端</a>。它是为了任意一种<a href="https://zh.wikipedia.org/wiki/程式語言" target="_blank" rel="noopener">编程语言</a>而写成的程序，利用<a href="https://zh.wikipedia.org/wiki/虛擬技術" target="_blank" rel="noopener">虚拟技术</a>创造出<a href="https://zh.wikipedia.org/wiki/編譯器" target="_blank" rel="noopener">编译时期</a>、<a href="https://zh.wikipedia.org/wiki/链接器" target="_blank" rel="noopener">链接时期</a>、<a href="https://zh.wikipedia.org/wiki/執行時期" target="_blank" rel="noopener">运行时期</a>以及“闲置时期”的最优化。它最早以<a href="https://zh.wikipedia.org/wiki/C语言" target="_blank" rel="noopener">C</a>/<a href="https://zh.wikipedia.org/wiki/C%2B%2B" target="_blank" rel="noopener">C++</a>为实现对象，而当前它已支持包括<a href="https://zh.wikipedia.org/wiki/ActionScript" target="_blank" rel="noopener">ActionScript</a>、<a href="https://zh.wikipedia.org/wiki/Ada" target="_blank" rel="noopener">Ada</a>、<a href="https://zh.wikipedia.org/wiki/D語言" target="_blank" rel="noopener">D语言</a>、<a href="https://zh.wikipedia.org/wiki/Fortran" target="_blank" rel="noopener">Fortran</a>、<a href="https://zh.wikipedia.org/wiki/GLSL" target="_blank" rel="noopener">GLSL</a>、<a href="https://zh.wikipedia.org/wiki/Haskell" target="_blank" rel="noopener">Haskell</a>、<a href="https://zh.wikipedia.org/wiki/Java" target="_blank" rel="noopener">Java</a>字节码、<a href="https://zh.wikipedia.org/wiki/Objective-C" target="_blank" rel="noopener">Objective-C</a>、<a href="https://zh.wikipedia.org/wiki/Swift語言" target="_blank" rel="noopener">Swift</a>、<a href="https://zh.wikipedia.org/wiki/Python" target="_blank" rel="noopener">Python</a>、<a href="https://zh.wikipedia.org/wiki/Ruby" target="_blank" rel="noopener">Ruby</a>、<a href="https://zh.wikipedia.org/wiki/Crystal" target="_blank" rel="noopener">Crystal</a>、<a href="https://zh.wikipedia.org/wiki/Rust" target="_blank" rel="noopener">Rust</a>、<a href="https://zh.wikipedia.org/wiki/Scala" target="_blank" rel="noopener">Scala</a><a href="https://zh.wikipedia.org/wiki/LLVM#cite_note-1" target="_blank" rel="noopener">[1]</a>以及<a href="https://zh.wikipedia.org/wiki/C♯" target="_blank" rel="noopener">C#</a><a href="https://zh.wikipedia.org/wiki/LLVM#cite_note-2" target="_blank" rel="noopener">[2]</a>等语言。</p>
+<p>LLVM项目的发展起源于2000年<a href="https://zh.wikipedia.org/wiki/伊利诺伊大学厄巴纳-香槟分校" target="_blank" rel="noopener">伊利诺伊大学厄巴纳-香槟分校</a><a href="https://zh.wikipedia.org/wiki/維克拉姆·艾夫" target="_blank" rel="noopener">维克拉姆·艾夫</a>（Vikram Adve）与<a href="https://zh.wikipedia.org/wiki/克里斯·拉特納" target="_blank" rel="noopener">克里斯·拉特纳</a>（Chris Lattner）的研究，他们想要为所有静态及<a href="https://zh.wikipedia.org/wiki/动态语言" target="_blank" rel="noopener">动态语言</a>创造出动态的编译技术。LLVM是以<a href="https://zh.wikipedia.org/wiki/BSD授權" target="_blank" rel="noopener">BSD许可</a>来发展的<a href="https://zh.wikipedia.org/wiki/开源" target="_blank" rel="noopener">开源</a>软件。2005年，<a href="https://zh.wikipedia.org/wiki/蘋果電腦" target="_blank" rel="noopener">苹果电脑</a>雇用了克里斯·拉特纳及他的团队为苹果电脑开发应用程序系统<a href="https://zh.wikipedia.org/wiki/LLVM#cite_note-3" target="_blank" rel="noopener">[3]</a>，LLVM为现今<a href="https://zh.wikipedia.org/wiki/Mac_OS_X" target="_blank" rel="noopener">Mac OS X</a>及<a href="https://zh.wikipedia.org/wiki/IOS" target="_blank" rel="noopener">iOS</a>开发工具的一部分。</p>
+<p>LLVM的命名最早源自于<strong>底层虚拟机</strong>（<strong>L</strong>ow <strong>L</strong>evel <strong>V</strong>irtual <strong>M</strong>achine）的<a href="https://zh.wikipedia.org/wiki/首字母缩写" target="_blank" rel="noopener">首字母缩写</a><a href="https://zh.wikipedia.org/wiki/LLVM#cite_note-4" target="_blank" rel="noopener">[4]</a>，由于这个项目的范围并不局限于创建一个虚拟机，这个缩写导致了广泛的疑惑。LLVM开始成长之后，成为众多编译工具及低端工具技术的统称，使得这个名字变得更不贴切，开发者因而决定放弃这个缩写的意涵<a href="https://zh.wikipedia.org/wiki/LLVM#cite_note-5" target="_blank" rel="noopener">[5]</a>，现今LLVM已单纯成为一个品牌，适用于LLVM下的所有项目，包含LLVM中介码（LLVM IR）、LLVM调试工具、LLVM C++标准库等。</p>
+<h3 id="OLLVM"><a href="#OLLVM" class="headerlink" title="OLLVM"></a><a href="https://github.com/obfuscator-llvm/obfuscator/wiki" target="_blank" rel="noopener"><strong>OLLVM</strong></a></h3><p><a href="https://github.com/obfuscator-llvm/obfuscator/wiki" target="_blank" rel="noopener">https://github.com/obfuscator-llvm/obfuscator/wiki</a></p>
+<p>OLLVM(Obfuscator-LLVM)是瑞士西北应用科技大学于2010年6月份发起的一个项目，该项目旨在提供一套开源的针对LLVM的代码混淆工具，以增加对逆向工程的难度。</p>
+<p>OLLVM是基于LLVM实现的，LLVM是一个编译器框架，它也采用经典的三段式设计。前端可以使用不同的编译工具对代码文件做词法分析以形成抽象语法树AST，然后将分析好的代码转换成LLVM的中间表示IR（intermediate representation）；中间部分的优化器只对中间表示IR操作，通过一系列的Pass对IR做优化；后端负责将优化好的IR解释成对应平台的机器码。LLVM的优点在于，不同的前端语言最终都转换成同一种的IR。</p>
+<p>OLLVM的混淆操作就是在中间表示IR层，通过编写Pass来混淆IR，然后后端依据IR来生成的目标代码也就被混淆了。得益于LLVM的设计，OLLVM适用LLVM支持的所有语言（C, C++, Objective-C, Ada 和 Fortran）和目标平台（x86, x86-64, PowerPC, PowerPC-64, ARM, Thumb, SPARC, Alpha, CellSPU, MIPS, MSP430, SystemZ, 和 XCore）。</p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/get.png" alt="get"></p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/howtouse.png" alt="howtouse"></p>
+<p align="center">ollvm GitHub介绍</p>
+
+<h4 id="简单例子"><a href="#简单例子" class="headerlink" title="简单例子"></a>简单例子</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">if</span> (a &gt; <span class="number">5</span>) &#123;</span><br><span class="line">        a += <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"a %d"</span>, a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        a *= <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"a %d"</span>, a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接编译  不添加混淆</span></span><br><span class="line">clang  tt.c  -o  no-ollvm</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/nollvm.png" alt="nollvm"></p>
+<p align="center">IDA反编译-图模式</p>
+
+
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/nollvm-code.png" alt="nollvm-code"></p>
+<p align="center">IDA反编译-伪代码模式</p>
+
+
+
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译  添加ollvm的fla扁平控制流混淆</span></span><br><span class="line">clang  tt.c  -o  fla-llvm  -mllvm  -fla</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/flallvm.png" alt="flallvm"></p>
+<p align="center">IDA反编译-图模式（混淆后）</p>
+
+
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/flallvm-code.png" alt="flallvm-code"></p>
+<p align="center">IDA反编译-伪代码模式（混淆后）</p>
+
+
+
+<p>验证结果显示，添加混淆操作后，反编译后伪代码和原始代码差异较大</p>
+<h2 id="混淆的代价"><a href="#混淆的代价" class="headerlink" title="混淆的代价"></a>混淆的代价</h2><p>由于混淆对原始代码进行了字符替换或逻辑调整，导致和原始代码有出入，会导致动态调试时和原始代码不对应，现场收集到的诸如stacktrace的信息变得难以读懂等问题。</p>
+<p>注：利用ProGuard进行混淆时可以生成一个mapping.txt文件，该文件中保存了混淆前后的代码映射，后期可以利用Retrace 工具将stacktrace等信息转换为原始信息。</p>
+<hr>
+<h1 id="加固"><a href="#加固" class="headerlink" title="加固"></a>加固</h1><p>市面上常见的加固平台有梆梆加固，爱加密，360 加固，腾讯加固, 加壳的程序可以有效阻止对程序的反编译分析，常用来保护软件版权，防止被破解。</p>
+<p>加壳基本原理一般是对原dex文件进行加密，加密动作写在so文件中，当程序启动时在内存中动态解密dex文件并加载启动。不同的厂商有自己的方案, 略有差距, 但目前多数都是这个思路。</p>
+<p>对加壳程序进行反编译，无法看到源代码，具体分析必须动态调试壳so文件。</p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/%E5%9B%BE%E7%89%871.png" alt="图片1"></p>
+<p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20200309161639.png" alt="微信截图_20200309161639"></p>
+<p align="center">反编译对比（左加壳 右无壳）</p>
+
+<h2 id="Android加固（加壳）"><a href="#Android加固（加壳）" class="headerlink" title="Android加固（加壳）"></a>Android加固（加壳）</h2><p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/Android.png" alt="Android"></p>
+<h2 id="ios加固"><a href="#ios加固" class="headerlink" title="ios加固"></a>ios加固</h2><p><img src="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/ios.png" alt="ios"></p>
+<h2 id="加固的代价"><a href="#加固的代价" class="headerlink" title="加固的代价"></a>加固的代价</h2><p>一般需要将应用APK上传到第三方加固厂家进行加固，无法了解其底层的加固逻辑，也有一定的代码泄露风险。由于第三方加固厂家对APK进行了操作（加解密），则APK的启动速度会变慢，同时有一定概率的闪退现象，对用户体验有一定的影响。</p>
+<p>参考：</p>
+<p><a href="https://mabin004.github.io/2018/08/23/ollvm学习/" target="_blank" rel="noopener">https://mabin004.github.io/2018/08/23/ollvm%E5%AD%A6%E4%B9%A0/</a></p>
+<p><a href="https://www.guardsquare.com/en/products/proguard" target="_blank" rel="noopener">https://www.guardsquare.com/en/products/proguard</a></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://8023believe.github.io/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8A%A0%E5%9B%BA%EF%BC%88%E5%A3%B3%EF%BC%89-%E8%84%B1%E5%A3%B3/" rel="tag">加固（壳）/脱壳</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B7%E6%B7%86/" rel="tag">混淆</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/20/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">反编译工具介绍</div>
+      </a>
+    
+  </nav>
+
+  
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020
+        <i class="ri-heart-fill heart_icon"></i> llfly
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="小小-变大"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2020/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Subtitle -->
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+      startDelay: 0,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 100,
+      showCursor: true
+    });
+  } catch (err) {
+    console.log(err)
+  }
+</script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>
