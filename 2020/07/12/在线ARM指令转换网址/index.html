@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    逆向 |  小小-变大
+    简单ARM指令修改 |  小小-变大
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -43,191 +43,176 @@
       
     <main class="content on">
       <section class="outer">
-  <article class="articles">
+  <article
+  id="post-在线ARM指令转换网址"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">逆向</h1>
-    
-    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  简单ARM指令修改
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/" class="article-date">
+  <time datetime="2020-07-11T16:00:00.000Z" itemprop="datePublished">2020-07-12</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
+  </div>
   
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2020" class="archive-year">2020</a>
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">195</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">1 分钟</span>
+        </span>
+    </span>
+</div>
+ 
     </div>
-    <div class="archives">
       
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/" class="archive-article-date">
-  <time datetime="2020-07-11T16:00:00.000Z" itemprop="datePublished">07/12</time>
-</a>
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
        
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/"
-    >简单ARM指令修改</a> 
-</h2>
+  <p>在逆向过程中，时长会遇到反调试或者破解的需求，一般可以通过修改so文件得到解决。</p>
+<p>本文主要通过一个简单so修改例子，介绍一个在线ARM指令转换网站。</p>
+<blockquote>
+<p>在线ARM指令转换网址:</p>
+<p><code>https://armconverter.com/</code></p>
+</blockquote>
+<h2 id="1-定位"><a href="#1-定位" class="headerlink" title="1. 定位"></a>1. 定位</h2><p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702153101388.png" alt="image-20200702153101388"></p>
+<p>通过代码分析已经发现<code>sub_1008c</code>为反调试代码，则将该条命令用<code>NOP</code>命令代替</p>
+<p>将so文件拖入winhex中定位到<code>25e0</code>位置</p>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702153417654.png" alt="image-20200702153417654"></p>
+<p>保险起见可以查看该条语句的上下命令的<code>hex</code></p>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702153748121.png" alt="image-20200702153748121"></p>
+<p>上一句命令为</p>
+<blockquote>
+<p>MOV    R2,R4      =&gt;    22  46</p>
+</blockquote>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702155342856.png" alt="image-20200702155342856"></p>
+<p>下一句命令为</p>
+<blockquote>
+<p>LDR    R0, [SP,#8]    =&gt;   02  98</p>
+</blockquote>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702155527622.png" alt="image-20200702155527622"></p>
+<h2 id="2-修改"><a href="#2-修改" class="headerlink" title="2. 修改"></a>2. 修改</h2><p>首先得到<code>NOP</code>的16进制表示</p>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702160516251.png" alt="image-20200702160516251"></p>
+<p>直接在winhex中修改</p>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702160943063.png" alt="image-20200702160943063"></p>
+<h2 id="3-结果"><a href="#3-结果" class="headerlink" title="3. 结果"></a>3. 结果</h2><p>修改后反编译结果</p>
+<p><img src="/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/image-20200702160841079.png" alt="image-20200702160841079"></p>
  
-
-    </header>
-    
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
-  </div>
-
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/29/xposed_hook_%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E7%AE%80%E5%8D%95hook%E7%A4%BA%E4%BE%8B/" class="archive-article-date">
-  <time datetime="2020-06-28T16:00:00.000Z" itemprop="datePublished">06/29</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/29/xposed_hook_%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E7%AE%80%E5%8D%95hook%E7%A4%BA%E4%BE%8B/"
-    >xposed_hook_环境搭建及简单hook示例</a> 
-</h2>
- 
-
-    </header>
-    
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
-  </div>
-
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/" class="archive-article-date">
-  <time datetime="2020-06-23T16:00:00.000Z" itemprop="datePublished">06/24</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/24/%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4/"
-    >代码保护</a> 
-</h2>
- 
-
-    </header>
-    
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
-  </div>
-
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/20/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" class="archive-article-date">
-  <time datetime="2020-06-19T16:00:00.000Z" itemprop="datePublished">06/20</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/20/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/"
-    >反编译工具介绍</a> 
-</h2>
- 
-
-    </header>
-    
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
-  </div>
-
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" class="archive-article-date">
-  <time datetime="2020-06-17T16:00:00.000Z" itemprop="datePublished">06/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/18/%E5%9F%BA%E4%BA%8Efrida%E7%9A%84%E8%87%AA%E5%8A%A8hook%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/"
-    >基于frida的自动hook工具介绍</a> 
-</h2>
- 
-
-    </header>
-    
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
-  </div>
-
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/06/17/android%20%E7%BD%91%E7%BB%9C%E5%85%B3%E9%94%AE%E5%AD%97/" class="archive-article-date">
-  <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">06/17</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/06/17/android%20%E7%BD%91%E7%BB%9C%E5%85%B3%E9%94%AE%E5%AD%97/"
-    >android 网络关键字</a> 
-</h2>
- 
-
-    </header>
-    
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%80%86%E5%90%91/">逆向</a>
-  </div>
-
-    
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://8023believe.github.io/2020/07/12/%E5%9C%A8%E7%BA%BFARM%E6%8C%87%E4%BB%A4%E8%BD%AC%E6%8D%A2%E7%BD%91%E5%9D%80/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95/" rel="tag">反调试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B1%87%E7%BC%96/" rel="tag">汇编</a></li></ul>
+
+    </footer>
   </div>
-  
-  
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/29/xposed_hook_%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E7%AE%80%E5%8D%95hook%E7%A4%BA%E4%BE%8B/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">xposed_hook_环境搭建及简单hook示例</div>
+      </a>
+    
+  </nav>
 
   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -375,6 +360,23 @@
 </script>
 
 <!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
